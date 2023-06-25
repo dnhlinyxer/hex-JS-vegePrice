@@ -48,7 +48,7 @@ function renderData(dataArray) {
 // 篩選『蔬菜』、『水果』、『花卉』三個類別
 btnGroup.addEventListener("click", function(e) {
     if (e.target.nodeName !== "BUTTON") return;
-    console.log(e.target.getAttribute("data-type"));
+    // console.log(e.target.getAttribute("data-type"));
 
     // 切換顏色
     btnTypeList.forEach(function(item) {
@@ -67,13 +67,13 @@ btnGroup.addEventListener("click", function(e) {
 
 // 搜尋作物名稱，並顯示當前搜尋的字詞和結果
 search.addEventListener("click", function(e) {
-
-    // 取消類別按鈕的顏色
-    btnTypeList.forEach(function(item) {
-        item.classList.remove("active");
-    });
-
     if (e.target.nodeName === "BUTTON") {
+
+        // 取消類別按鈕的顏色
+        btnTypeList.forEach(function(item) {
+            item.classList.remove("active");
+        });
+        
         if (inputCrop.value.trim() === "") return alert("記得輸入作物名稱喔！");
         const inputCropText = inputCrop.value.trim();
         filteredData = productsData.filter(function(item) {
@@ -96,49 +96,48 @@ search.addEventListener("click", function(e) {
 
 // 排序篩選資料
 select.addEventListener("change", function (e) {
+    selectCallBack(e);
+});
+
+selectMoblie.addEventListener("change", function (e) {
+    selectCallBack(e);
+});
+
+function selectCallBack(e) {
     if (filteredData.length === 0) return alert("請先搜尋作物名稱或點擊分類再進行篩選喔！");
     switch (e.target.value) {
         case "依上價排序":
             selectChange("上價");
             break;
+        case "上價":
+            selectChange("上價");
+            break;
         case "依中價排序":
+            selectChange("中價");
+            break;
+        case "中價":
             selectChange("中價");
             break;
         case "依下價排序":
             selectChange("下價");
             break;
+        case "下價":
+            selectChange("下價");
+            break;
         case "依平均價排序":
+            selectChange("平均價");
+            break;
+        case "平均價":
             selectChange("平均價");
             break;
         case "依交易量排序":
             selectChange("交易量");
             break;
-        // default:
-    }
-});
-
-selectMoblie.addEventListener("change", function (e) {
-    console.log(e.target.value);
-    if (filteredData.length === 0) return alert("請先搜尋作物名稱或點擊分類再進行篩選喔！");
-    switch (e.target.value) {
-        case "上價":
-            selectChange("上價");
-            break;
-        case "中價":
-            selectChange("中價");
-            break;
-        case "下價":
-            selectChange("下價");
-            break;
-        case "平均價":
-            selectChange("平均價");
-            break;
         case "交易量":
             selectChange("交易量");
             break;
-        // default:
     }
-});
+}
 
 function selectChange(value) {
     filteredData.sort(function(a, b) {
@@ -155,6 +154,28 @@ selectAdvanced.addEventListener("click", function(e) {
         let sortCaret = e.target.getAttribute("data-sort");
         filteredData.sort((a, b) => (sortCaret === "up") ? b[sortPrice] - a[sortPrice] : a[sortPrice] - b[sortPrice]);
         renderData(filteredData);
+
+        // 將 selectAdvanced 和 select 的 option 做連動
+        let selectValue;
+        switch (sortPrice) {
+            case "上價":
+                selectValue = "上價"
+                break;
+            case "中價":
+                selectValue = "中價";
+                break;
+            case "下價":
+                selectValue = "下價";
+                break;
+            case "平均價":
+                selectValue = "平均價";
+                break;
+            case "交易量":
+                selectValue = "交易量";
+                break;
+        }
+        select.value = selectValue;
+        selectMoblie.value = selectValue;
     }
 });
 
