@@ -59,10 +59,12 @@ btnGroup.addEventListener("click", function(e) {
     const typeCode = e.target.getAttribute("data-type");
 
     filteredData = productsData.filter(function(item) {
-         return item["種類代碼"] === typeCode;
+        return item["種類代碼"] === typeCode;
     });
 
     renderData(filteredData);
+    // showResult.style.display = "none";
+    showResult.innerHTML = ``;
 });
 
 // 搜尋作物名稱，並顯示當前搜尋的字詞和結果
@@ -91,17 +93,15 @@ search.addEventListener("click", function(e) {
             showResult.innerHTML = `<i class="fas fa-search"></i>「${inputCropText}」的搜尋結果：`;
         }
         inputCrop.value = "";
+        select.value = "排序篩選";
+        selectMoblie.value = "排序";
     }
 });
 
 // 排序篩選資料
-select.addEventListener("change", function (e) {
-    selectCallBack(e);
-});
+select.addEventListener("change", selectCallBack);
 
-selectMoblie.addEventListener("change", function (e) {
-    selectCallBack(e);
-});
+selectMoblie.addEventListener("change", selectCallBack);
 
 function selectCallBack(e) {
     if (filteredData.length === 0) return alert("請先搜尋作物名稱或點擊分類再進行篩選喔！");
